@@ -46,3 +46,4 @@ inner join atividade1.curtida on atividade1.curtida.idAluno1 = atividade1.aluno.
 SELECT * FROM atividade1.aluno;
 SELECT * FROM atividade1.amigo;
 SELECT * FROM atividade1.curtida;
+
