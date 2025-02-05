@@ -255,10 +255,19 @@ where h.idhorario = htf.horarioIdHorario and htf.funcionarioIdFuncionario = f.id
 ORDER BY h.horario ASC; 
 
 -- 10 Listar os filmes que foram exibidos na mesma sala em horários diferentes.
+
 select f.NomeBr from filme f, filmeExibidoSala fes
 where f.id = fes.filmeIdFilme
 group by f.id, f.NomeBr
 having count( DISTINCT fes.salaIdSala ) >= 2;
+
+SELECT f.NomeBR AS NomeFilme, s.NomeSala, COUNT(DISTINCT h.horario) AS TotalHorarios
+FROM filme f
+JOIN filmeExibidoSala fes ON f.id = fes.filmeIdFilme
+JOIN sala s ON fes.salaIdSala = s.idSala
+JOIN horario h ON fes.horarioIdHorario = h.idHorario
+GROUP BY f.id, f.NomeBR, s.idSala, s.NomeSala
+HAVING COUNT(DISTINCT h.horario) > 1;
 
 -- 11 Unir os diretores e os funcionarios em uma única lista de pessoas.
 
