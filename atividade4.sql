@@ -1,3 +1,10 @@
+-- serial é o auto incremento
+-- MySQL 
+-- codigoDeBarras varchar(200) Default uuid_gereate()
+
+-- PostgreSQL
+-- codigoDeBarras Default uuid_gereate()
+
 create table Empregado (
     Nome varchar(50),
     Endereco varchar(500),
@@ -156,3 +163,5 @@ where e.Salario > (SELECT max(salario) from Empregado e, Departamento d where d.
 
 select nome from Empregado 
 where salario > all (select salario from Empregado where NumDep = 2);
+
+
