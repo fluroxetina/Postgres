@@ -275,6 +275,11 @@ select d.Nome from diretor d  union select f.NomeFuncionario from funcionario f 
 
 -- 12 Exibir todas as funções diferentes que os funcionários exercem e a quantidade de funcionários em cada uma.
 
+select funcao.NomeFuncao as funcao, Count(f.idFuncionario) as QuantidadeFuncionarios
+from funcionario f 
+join funcao on f.idFuncionario = funcao.idFuncao
+group by funcao.NomeFuncao;
+
 
 SELECT fu.NomeFuncao, COUNT(DISTINCT f.idFuncionario) AS QuantidadeFuncionarios
 FROM funcao fu
@@ -289,6 +294,13 @@ join filmeExibidoSala fe on f.id = fe.filmeidfilme
 join sala s on s.idsala = fe.salaidsala
 where s.capacidade > (select avg(s.capacidade) from sala s);
 
+
+select f.nomeBR, s.NomeSala as sala, s.capacidade
+from filmeExibidoSala fs
+join sala s on fs.salaidsala = s.idSala
+join filme f on fs.filmeidfilme =f.id
+where s.capacidade > (select avg (capacidade) from sala);
+
 -- 14 Calcular o salário anual dos funcionários (considerando 12 meses).
 
 select f.NomeFuncionario, f.Salario * 12 from funcionario f;
@@ -302,6 +314,14 @@ LEFT JOIN filme f ON fes.filmeIdFilme = f.id
 GROUP BY s.idSala, s.NomeSala, s.capacidade
 ORDER BY s.capacidade DESC;
 
+
+select s.NomeSala as sala, s.capacidade, count(fs.filmeidfilme) as totalFilmesExibidos,
+(count(fs.filmeidfilme) / nullif(s.capacidade, 0))  as filmesPorAssento
+from sala s
+left join filmeexibidosala fs on s.idSala = fs.salaidsala 
+group by s.idsala, s.capacidade;
+
+
 create view Salaa1 as  
 SELECT s.NomeSala, s.capacidade, COUNT(fes.filmeIdFilme) AS TotalFilmesExibidos, STRING_AGG(f.NomeBR, ', ') AS FilmesExibidos
 FROM sala s
@@ -310,8 +330,9 @@ LEFT JOIN filme f ON fes.filmeIdFilme = f.id
 GROUP BY s.idSala, s.NomeSala, s.capacidade
 ORDER BY s.capacidade DESC;
 
+select nomesala from sala;
 
 select * from Salaa1;
 
 drop view Salaa1;
-                                                                                  
+
