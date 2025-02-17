@@ -141,15 +141,29 @@ SELECT * FROM atv9.ObterHoras(123);
 
 -- 8. Função com Exception que retorna o salario de um empregado dado o CPF
 
-create or replace function atv9.obterSalario(CPFemp BIGINT) returns INT as $$
-begin 
-    return(select e.Salario from atv9.Empregado e where e.CPF = CPFemp);
-    Exception 
-        when No_Data_Found then
-        raise notice 'Empregado nao encontrado';
-end;
-$$ language plpgsql;
+CREATE OR REPLACE FUNCTION atv9.obterSalario2(CPFemp BIGINT) 
+RETURNS FLOAT AS $$
+DECLARE
+    v_salario FLOAT;
+BEGIN
+    SELECT e.Salario INTO v_salario FROM atv9.Empregado e WHERE e.CPF = CPFemp;
+
+    IF v_salario IS NULL THEN
+        RAISE EXCEPTION 'CPF nao encontrado';
+    END IF;
+
+    RETURN v_salario;
+
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'Erro ao obter salario: %', SQLERRM;
+END;
+$$ LANGUAGE plpgsql;
 
 
-select * from atv9.obterSalario(1113);
+
+
+
+select * from atv9.obterSalario2(1212);
+
 
